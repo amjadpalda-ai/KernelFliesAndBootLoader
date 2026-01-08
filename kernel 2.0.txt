@@ -1,0 +1,9 @@
+welcome to kernel 2.0 bootloader
+ok 
+ok
+ok
+ok
+ok
+ok
+ok
+ok 
