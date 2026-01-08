@@ -1,3 +1,4 @@
 Loading bootloader
 usb failed
 booting from dvd
+no display
