@@ -19,8 +19,9 @@ def main():
     args = parser.parse_args()
 
     qemu = shutil.which("qemu-system-x86_64")
-    if not qemu:
-        raise SystemExit("QEMU is not installed or qemu-system-x86_64 is not in PATH.")
+    qemu_img = shutil.which("qemu-img")
+    if not qemu or not qemu_img:
+        raise SystemExit("Install QEMU and make qemu-system-x86_64 and qemu-img available in PATH.")
 
     iso = Path(args.iso).expanduser().resolve()
     disk = Path(args.disk).expanduser().resolve()
@@ -28,14 +29,7 @@ def main():
         raise SystemExit(f"Windows 10 ISO not found: {iso}")
 
     if not disk.exists():
-        subprocess.run([
-            qemu, "-drive", f"file={disk},format=qcow2,if=none,id=disk",
-            "-qemu-img-create", "qcow2", "64G"
-        ], check=False)
-        # Create the disk with qemu-img when available.
-        qemu_img = shutil.which("qemu-img")
-        if not qemu_img:
-            raise SystemExit("qemu-img is required to create the virtual disk.")
+        print(f"Creating 64 GB virtual disk: {disk}")
         subprocess.run([qemu_img, "create", "-f", "qcow2", str(disk), "64G"], check=True)
 
     cmd = [
